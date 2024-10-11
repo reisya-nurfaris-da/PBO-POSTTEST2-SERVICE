@@ -1,0 +1,4 @@
+service\Service.class
+model\RepairSchedule.class
+model\SparePart.class
+model\Technician.class
