@@ -85,15 +85,22 @@ class TechnicianService implements CRUDService<Technician> {
 
     @Override
     public void update(int id, Technician newTechnician) {
-        // nyari teknisi yang mau di-update berdasarkan ID
-        for (int i = 0; i < technicians.size(); i++) {
-            if (technicians.get(i).getId() == id) {
-                // ganti objek teknisi dengan yang baru
-                technicians.set(i, newTechnician);
+        for (Technician technician : technicians) {
+            if (technician.getId() == id) {
+                technician.setName(newTechnician.getName());
+                // kalau teknisinya tipe hp, update OS-nya
+                if (technician instanceof PhoneTechnician && newTechnician instanceof PhoneTechnician) {
+                    ((PhoneTechnician) technician).setOS(((PhoneTechnician) newTechnician).getOS());
+                }
+                // kalau teknisinya tipe komputer, update skill hardware-nya
+                else if (technician instanceof ComputerTechnician && newTechnician instanceof ComputerTechnician) {
+                    ((ComputerTechnician) technician).setHardwareSkills(((ComputerTechnician) newTechnician).getHardwareSkills());
+                }
                 break;
             }
         }
-    }    
+    }
+    
 
     @Override
     public void delete(int id) {
@@ -353,36 +360,39 @@ public class Service {
         System.out.print("Masukkan ID teknisi yang ingin diedit: ");
         int id = scanner.nextInt();
         scanner.nextLine();
-
+    
         Technician technicianToEdit = null;
-        for (Technician tech : technicianService.getAll()) {
-            if (tech.getId() == id) {
-                technicianToEdit = tech;
+        int indexToEdit = -1;
+    
+        for (int i = 0; i < technicianService.getAll().size(); i++) {
+            if (technicianService.getAll().get(i).getId() == id) {
+                technicianToEdit = technicianService.getAll().get(i);
+                indexToEdit = i;
                 break;
             }
         }
-
+    
         if (technicianToEdit != null) {
-            // Edit nama teknisi
             System.out.print("Masukkan nama teknisi baru (biarkan kosong jika tidak ingin diubah): ");
             String newName = scanner.nextLine();
             if (!newName.isEmpty()) {
                 technicianToEdit.setName(newName);
             }
-
-            // Edit jenis teknisi
-            System.out.println("Pilih jenis teknisi baru (biarkan kosong jika tidak ingin diubah): ");
+    
+            System.out.println("Pilih tipe teknisi baru (biarkan kosong jika tidak ingin diubah): ");
             System.out.println("[1] Teknisi HP");
             System.out.println("[2] Teknisi Komputer");
             System.out.print("Pilihan: ");
             String choice = scanner.nextLine();
-            
+    
+            Technician updatedTechnician = null;
+    
             if (!choice.isEmpty()) {
                 switch (choice) {
                     case "1" -> {
-                        System.out.print("Masukkan sistem operasi yang dikuasai (e.g., Android, iOS): ");
+                        System.out.print("Masukkan sistem operasi yang dikuasai (misal: Android, iOS): ");
                         String newOs = scanner.nextLine();
-                        technicianToEdit = new PhoneTechnician(technicianToEdit.getName(), newOs);
+                        updatedTechnician = new PhoneTechnician(technicianToEdit.getName(), newOs); // Buat objek baru
                     }
                     case "2" -> {
                         List<String> newHardwareSkills = new ArrayList<>();
@@ -395,19 +405,26 @@ public class Service {
                             }
                             newHardwareSkills.add(skill);
                             i++;
-                        }   technicianToEdit = new ComputerTechnician(technicianToEdit.getName(), newHardwareSkills);
+                        }
+                        updatedTechnician = new ComputerTechnician(technicianToEdit.getName(), newHardwareSkills); // Buat objek baru
                     }
-                    default -> System.out.println("Pilihan tidak valid, jenis teknisi tidak diubah.");
+                    default -> System.out.println("Pilihan tidak valid, tipe teknisi tidak diubah.");
                 }
             }
-
-            technicianService.update(id, technicianToEdit);
-            System.out.println("Teknisi berhasil diperbarui.");
+    
+            if (updatedTechnician != null) {
+                updatedTechnician.setId(technicianToEdit.getId()); // supaya idnya tetap sama
+                technicianService.getAll().set(indexToEdit, updatedTechnician); // ganti teknisi di listnya
+                System.out.println("Tipe teknisi berhasil diubah.");
+            } else {
+                technicianService.update(id, technicianToEdit); // update biasa kalau tipenya gak berubah
+                System.out.println("Teknisi berhasil diperbarui.");
+            }
         } else {
             System.out.println("Teknisi dengan ID tersebut tidak ditemukan.");
         }
     }
-
+    
     static void deleteTechnician(Scanner scanner) {
         System.out.print("Masukkan ID teknisi yang ingin dihapus: ");
         int id = scanner.nextInt();

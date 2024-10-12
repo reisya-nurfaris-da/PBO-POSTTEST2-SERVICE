@@ -2,7 +2,7 @@ package model;
 
 public abstract class Technician {
     private static int nextId = 1;
-    private final int id;
+    private int id;
     private String name;
 
     public Technician(String name) {
@@ -10,7 +10,7 @@ public abstract class Technician {
         this.name = name;
     }
 
-    public final int getId() {
+    public int getId() {
         return id;
     }
 
@@ -25,5 +25,9 @@ public abstract class Technician {
     @Override
     public String toString() {
         return "ID: " + id + ", Nama: " + name;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

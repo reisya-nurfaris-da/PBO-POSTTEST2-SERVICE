@@ -1,7 +1,7 @@
 package model;
 
 public class PhoneTechnician extends Technician {
-    private final String OS;
+    private String OS;
     public PhoneTechnician(String name, String OS) {
         super(name);
         this.OS = OS;
@@ -10,5 +10,13 @@ public class PhoneTechnician extends Technician {
     @Override
     public String toString() {
         return super.toString() + " ("+OS+")";
+    }
+
+    public String getOS() {
+        return OS;
+    }
+
+    public void setOS(String oS) {
+        OS = oS;
     }
 }
