@@ -24,15 +24,22 @@
 contoh di kategori teknisi (class Technician). Untuk kategori lainnya sama aja, cuma beda input.
 
 ### 1. Read
+Contoh nampilin daftar teknisi
+
 ![image](https://github.com/user-attachments/assets/196d598a-b7c9-4a2e-971e-b91db24d90a5)
 
 ### 2. Create
 Contoh nambah teknisi baru yang khusus HP Android
+
 ![image](https://github.com/user-attachments/assets/ad26d143-5b52-4e44-a3b6-e655cd66c745)
 
 ### 3. Update
+Contoh edit teknisi hp jadi teknisi komputer
+
 ![image](https://github.com/user-attachments/assets/9a60bb6c-73ff-4438-8a50-2f229e966b4a)
 
 ### 4. Delete
+Contoh hapus salah satu teknisi (id 3)
+
 ![image](https://github.com/user-attachments/assets/ef595dd8-cb40-41e5-92c1-6506c5f7d013)
 
